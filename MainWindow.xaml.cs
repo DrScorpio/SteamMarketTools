@@ -49,13 +49,32 @@ namespace SteamMarketTools
 
         private void DoCalculate(object sender, RoutedEventArgs e)
         {
+            if(PrimeCostBox.Text == "")
+            {
+                MessageBox.Show("请输入收购价格!");
+                return;
+            }
+            if(MarketOrderPriceBox.Text == "" && MarketSellingPriceBox.Text == "") {
+                MessageBox.Show("请输入市场售出价格!");
+                return;
+            }
             double primeC = Double.Parse(PrimeCostBox.Text);
-            double orderSellingP = Double.Parse(MarketOrderPriceBox.Text);
-            double SellingP = Double.Parse(MarketSellingPriceBox.Text);
-            double taxedOrder = Math.Round(SteamMarketCalculator.TaxedPrice(orderSellingP),2);
-            double taxedSell = Math.Round(SteamMarketCalculator.TaxedPrice(SellingP),2);
-
-            var discount = SteamMarketCalculator.GetDiscount(primeC,orderSellingP);
+            double usePrice = primeC;
+            if(MarketSellingPriceBox.Text != "" && MarketOrderPriceBox.Text != "")
+            {
+                double orderSellingP = Double.Parse(MarketOrderPriceBox.Text);
+                double SellingP = Double.Parse(MarketSellingPriceBox.Text);
+                double taxedOrder = Math.Round(SteamMarketCalculator.TaxedPrice(orderSellingP), 2);
+                double taxedSell = Math.Round(SteamMarketCalculator.TaxedPrice(SellingP), 2);
+                usePrice = Math.Max(taxedOrder, taxedSell);
+            }else if (MarketOrderPriceBox.Text != "")
+            {
+                usePrice = Double.Parse(MarketOrderPriceBox.Text);
+            }else if (MarketSellingPriceBox.Text != "")
+            {
+                usePrice = Double.Parse(MarketSellingPriceBox.Text);
+            }
+            var discount = SteamMarketCalculator.GetDiscount(primeC,usePrice);
             DiscountText.Text = discount.ToString();
         }
 
