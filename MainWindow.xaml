@@ -6,7 +6,7 @@
         xmlns:input="clr-namespace:System.Windows.Input;assembly=PresentationCore"
         xmlns:local="clr-namespace:SteamMarketTools"
         mc:Ignorable="d"
-        Title="SteamMarketTools" Height="200" Width="400" Background="#FF1A1A1A">
+        Title="SteamMarketTools" Height="250" Width="400" Background="#FF1A1A1A">
     <Window.Resources>
         <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="TextWrapping" Value="NoWrap"/>
@@ -39,7 +39,7 @@
             <Setter Property="Width" Value="50"/>
             <Setter Property="Height" Value="25"/>
             <Setter Property="Margin" Value="5,5,5,5"/>
-            <Setter Property="InputScope" Value="Number"/>
+            
             <EventSetter Event="PreviewTextInput" Handler="TextBox_PreviewTextInput"/>
             <EventSetter Event="PreviewKeyDown" Handler="TextBox_PreviewKeyDown"/>
             
