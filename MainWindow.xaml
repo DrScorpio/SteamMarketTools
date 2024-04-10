@@ -6,8 +6,34 @@
         xmlns:input="clr-namespace:System.Windows.Input;assembly=PresentationCore"
         xmlns:local="clr-namespace:SteamMarketTools"
         mc:Ignorable="d"
-        Title="SteamMarketTools" Height="250" Width="400" Background="#FF1A1A1A">
+        FontWeight="ExtraLight" ResizeMode="CanResize" WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Title="SteamMarketTools" Height="800" Width="1000" Background="#FF1A1A1A">
+        
     <Window.Resources>
+        <Style x:Key="btn_nap" TargetType="{x:Type Button}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"></ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.7"/>
+                </Trigger>
+                <!--<Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Background" Value="#EEF0F5"/>
+                </Trigger>-->
+            </Style.Triggers>
+        </Style>
         <Style x:Key="TextBlockStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="TextWrapping" Value="NoWrap"/>
             <Setter Property="TextTrimming" Value="None"/>
@@ -21,7 +47,7 @@
         <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF9d9d9d"/>
         <VisualBrush x:Key="HelpBrush" TileMode="None" Opacity="0.3" Stretch="None" AlignmentX="Left">
             <VisualBrush.Visual>
-                <TextBlock FontStyle="Italic" Text="请输入数字"/>
+                <TextBlock FontStyle="Italic" Text="请输入数字" Foreground="#9e9e9e"/>
             </VisualBrush.Visual>
         </VisualBrush>
         <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
@@ -36,7 +62,7 @@
             <Setter Property="AllowDrop" Value="true"/>
             <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
             <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-            <Setter Property="Width" Value="50"/>
+            <Setter Property="Width" Value="80"/>
             <Setter Property="Height" Value="25"/>
             <Setter Property="Margin" Value="5,5,5,5"/>
             
@@ -80,50 +106,233 @@
                 </MultiTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FF3A3A3A"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="#9e9e9e"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="ListBox.Static.Background" Color="#FF2A2A2A"/>
+        <SolidColorBrush x:Key="ListBox.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="ListBox.Disabled.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ListBox.Disabled.Border" Color="#FFD9D9D9"/>
+        <Style x:Key="ListBoxStyle" TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="{StaticResource ListBox.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ListBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="#FF9E9E9E"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Height" Value="200"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" SnapsToDevicePixels="true">
+                            <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </ScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource ListBox.Disabled.Border}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsGrouping" Value="true"/>
+                                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
+            <Setter Property="BorderBrush" Value="#FF3A3A3A"/>
+        </Style>
     </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="35" x:Name="windowChrome" CornerRadius="0" GlassFrameThickness="0"/>
+    </WindowChrome.WindowChrome>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" >
-            <TextBlock Text="预估折扣:" Style="{DynamicResource TextBlockStyle}" />
-            <TextBlock x:Name="DiscountText" Margin="5,5,10,5"  VerticalAlignment="Center" FontSize="14" Foreground="#BEBEBE" />
-        </StackPanel>
+        <!--#region Title-->
+        <Border BorderThickness="0 0 0 1" Style="{DynamicResource BorderStyle}" Background="#FF3A3A3A" Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Steam市场助手" Style="{DynamicResource TextBlockStyle}" FontSize="15" FontWeight="Bold" Margin="10 0 0 0" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                    <Button WindowChrome.IsHitTestVisibleInChrome="True" x:Name="button_MiniSize" Content="─" Style="{StaticResource btn_nap}" HorizontalAlignment="Right" Foreground="White" Margin="0 0 5 0" Height="30" Width="30" Click="CustomWindowBtnMinimized_Click"/>
+                    <Button WindowChrome.IsHitTestVisibleInChrome="True" x:Name="button_MaxSize" Content="☐" Style="{StaticResource btn_nap}" HorizontalAlignment="Right" Foreground="White" Margin="0 0 5 0" Height="30" Width="30" Click="CustomWindowBtnMaxNormal_Click"/>
+                    <Button WindowChrome.IsHitTestVisibleInChrome="True" x:Name="btn_Close" Content="✕" Style="{StaticResource btn_nap}" HorizontalAlignment="Right" Foreground="White" Margin="0 0 5 0" Height="30" Width="30" Click="CustomWindowBtnClose_Click"/>
+                </StackPanel>
+            </Grid>
+            
+        </Border>
+        <!--#endregion-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100*"/>
-                <ColumnDefinition Width="80*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <UniformGrid Grid.Row="0" Rows="4" Columns="1" Grid.ColumnSpan="2">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock  Text="收购单价" Style="{DynamicResource TextBlockStyle}"/>
-                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PrimeCostBox"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock  Text="收购数量" Style="{DynamicResource TextBlockStyle}" />
-                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PrimeCountBox" />
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock  Text="Steam市场收购价" Style="{DynamicResource TextBlockStyle}"/>
-                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="MarketOrderPriceBox" TextChanged="OrderChanged" />
-                    <TextBlock Text="税后：" Style="{DynamicResource TextBlockStyle}" />
-                    <TextBlock  x:Name="orderDiscount" Margin="5,5,10,5"  VerticalAlignment="Center" FontSize="14" Foreground="#BEBEBE"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Steam市场寄售价" Style="{DynamicResource TextBlockStyle}"/>
-                    <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="MarketSellingPriceBox" TextChanged="SellChanged"/>
-                    <TextBlock Text="税后：" Style="{DynamicResource TextBlockStyle}" />
-                    <TextBlock  x:Name="sellDiscount" Margin="5,5,10,5"  VerticalAlignment="Center" FontSize="14" Foreground="#BEBEBE"/>
-                </StackPanel>
-                
-            </UniformGrid>
-            <UniformGrid Grid.Column="1" Columns="1" Rows="4">
-                <Button Content="计算" Click="DoCalculate" Width="80" Height="25" Background="#FF3A3A3A" Foreground="#9e9e9e" />
-            </UniformGrid>
-            
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!--#region 左上-->
+            <Border BorderThickness="0 0 1 1" Style="{DynamicResource BorderStyle}"  Grid.Column="0" Grid.Row="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border BorderThickness="0 0 0 1" Style="{DynamicResource BorderStyle}" Grid.Row="0">
+                        <TextBlock Text="价格计算器" Style="{DynamicResource TextBlockStyle}"/>
+                    </Border>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" >
+                        <TextBlock Text="预估折扣:" Style="{DynamicResource TextBlockStyle}" />
+                        <TextBlock x:Name="DiscountText" Margin="5,5,10,5"  VerticalAlignment="Center" FontSize="14" Foreground="#BEBEBE" />
+                    </StackPanel>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*"/>
+                            <ColumnDefinition Width="80*"/>
+                        </Grid.ColumnDefinitions>
+                        <UniformGrid Grid.Row="0" Rows="5" Columns="1" Grid.ColumnSpan="2">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock  Text="收购单价" Style="{DynamicResource TextBlockStyle}"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PrimeCostBox"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock  Text="收购数量" Style="{DynamicResource TextBlockStyle}" />
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="PrimeCountBox" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock  Text="Steam市场收购价" Style="{DynamicResource TextBlockStyle}"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="MarketOrderPriceBox" TextChanged="OrderChanged" />
+                                <TextBlock Text="税后：" Style="{DynamicResource TextBlockStyle}" />
+                                <TextBlock  x:Name="orderDiscount" Margin="5,5,10,5"  VerticalAlignment="Center" FontSize="14" Foreground="#BEBEBE"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Steam市场寄售价" Style="{DynamicResource TextBlockStyle}"/>
+                                <TextBox Style="{DynamicResource TextBoxStyle}" x:Name="MarketSellingPriceBox" TextChanged="SellChanged"/>
+                                <TextBlock Text="税后：" Style="{DynamicResource TextBlockStyle}" />
+                                <TextBlock  x:Name="sellDiscount" Margin="5,5,10,5"  VerticalAlignment="Center" FontSize="14" Foreground="#BEBEBE"/>
+                            </StackPanel>
+                            <Button Style="{DynamicResource ButtonStyle}" Content="计算" Click="DoCalculate" Width="80" Height="25"/>
+                        </UniformGrid>
+                    </Grid>
+                </Grid>
+            </Border>
+            <!--#endregion-->
+            <!--#region 右上-->
+            <Border BorderThickness="0 0 0 1" Style="{DynamicResource BorderStyle}" Grid.Column="1" Grid.Row="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Border BorderThickness="0 0 0 1" Style="{DynamicResource BorderStyle}" Grid.Row="0">
+                        <TextBlock Text="Steam商城批量上架链接生成" Style="{DynamicResource TextBlockStyle}"/>
+                    </Border>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Vertical">
+                            <ListBox x:Name="ItemBox" DisplayMemberPath="Name" Style="{DynamicResource ListBoxStyle}"/>
+                            <Button Content="添加" Click="Add_Click" Style="{DynamicResource ButtonStyle}"/>
+                            <Button Content="清除" Click="Clear_Click" Style="{DynamicResource ButtonStyle}"/>
+                            <Button Content="添加到剪贴板" Click="Copy_Click" Style="{DynamicResource ButtonStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <ListBox x:Name="SelectedItemBox" DisplayMemberPath="Name" Style="{DynamicResource ListBoxStyle}"/>
+                            <Button Content="删除" Click="Remove_Click" Style="{DynamicResource ButtonStyle}" />
+                            <TextBox x:Name="UrlBox" MinHeight="50" Foreground="#9e9e9e" Background="#FF2A2A2A" Margin="5" IsReadOnly="True" TextWrapping="WrapWithOverflow"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+            <!--#endregion-->
         </Grid>
+        <Border Background="#FF2A2A2A" Style="{DynamicResource BorderStyle}" BorderThickness="0,1,0,0" Grid.Row="2">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="版本 alapha 1.0.0" Style="{DynamicResource TextBlockStyle}" Width="100" FontSize="12"/>
+                <TextBlock Text="Made By DrScorpio" Style="{DynamicResource TextBlockStyle}" FontSize="12"/>
+            </StackPanel>
+            
+        </Border>
     </Grid>
+
+
 
 
 </Window>

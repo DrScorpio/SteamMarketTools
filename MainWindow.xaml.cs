@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,10 +17,20 @@ namespace SteamMarketTools
     /// </summary>
     public partial class MainWindow : Window
     {
+        public OnSaleGenerater generater;
         public MainWindow()
         {
             InitializeComponent();
+
+            GetItems(ItemBox);
+
+            this.generater = new OnSaleGenerater();
+
+            UrlBox.Text = generater.ShowURL();
         }
+
+
+
         private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             int t = 0;
@@ -95,6 +106,106 @@ namespace SteamMarketTools
                 double sellingP = Double.Parse(MarketSellingPriceBox.Text);
                 double taxedSelling = Math.Round(SteamMarketCalculator.TaxedPrice(sellingP), 2);
                 sellDiscount.Text = taxedSelling.ToString();
+            }
+        }
+
+
+        public void GetItems(ListBox box)
+        {
+            try
+            {
+                // 读取文本文件
+                using (StreamReader sr = new StreamReader("Item.data"))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        var l = line.Split(' ');
+                        var it = new Item(l[0], l[1]);
+                        box.Items.Add(it);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            if (ItemBox.SelectedItem == null)
+            {
+                MessageBox.Show("请在左侧选择要添加的内容");
+                return;
+            }
+            Item item = (Item)ItemBox.SelectedItem;
+            generater.AddItem(item);
+            SelectedItemBox.Items.Add(item);
+            ItemBox.Items.Remove(item);
+            UrlBox.Text = generater.ShowURL();
+        }
+
+        private void Remove_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedItemBox.SelectedItem == null)
+            {
+                MessageBox.Show("请在右侧选择要删除的内容");
+                return;
+            }
+            Item item = (Item)SelectedItemBox.SelectedItem;
+            generater.RemoveItem(item);
+            SelectedItemBox.Items.Remove(item);
+            ItemBox.Items.Add(item);
+            UrlBox.Text = generater.ShowURL();
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Item item in SelectedItemBox.Items)
+            {
+                ItemBox.Items.Add(item);
+            }
+            SelectedItemBox.Items.Clear();
+            generater.ClearItem();
+            UrlBox.Text = generater.ShowURL();
+        }
+
+        private void Copy_Click(object sender, RoutedEventArgs e)
+        {
+
+            Clipboard.SetText(UrlBox.Text);
+        }
+
+
+        // 关闭
+        private void CustomWindowBtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Window win = Application.Current.MainWindow;
+            win.Close();
+        }
+
+        // 最小化
+        private void CustomWindowBtnMinimized_Click(object sender, RoutedEventArgs e)
+        {
+            Window win = Application.Current.MainWindow;
+            win.WindowState = WindowState.Minimized;
+        }
+
+        // 最大化、还原
+        private void CustomWindowBtnMaxNormal_Click(object sender, RoutedEventArgs e)
+        {
+            Window win = Application.Current.MainWindow;
+            if (win.WindowState == WindowState.Maximized)
+            {
+                win.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                // 不覆盖任务栏
+                win.MaxWidth = SystemParameters.WorkArea.Width;
+                win.MaxHeight = SystemParameters.WorkArea.Height;
+                win.WindowState = WindowState.Maximized;
             }
         }
     }
