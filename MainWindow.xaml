@@ -325,7 +325,7 @@
         </Grid>
         <Border Background="#FF2A2A2A" Style="{DynamicResource BorderStyle}" BorderThickness="0,1,0,0" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="版本 alapha 1.0.0" Style="{DynamicResource TextBlockStyle}" Width="100" FontSize="12"/>
+                <TextBlock Text="版本 Alapha 1.0.0" Style="{DynamicResource TextBlockStyle}" Width="100" FontSize="12"/>
                 <TextBlock Text="Made By DrScorpio" Style="{DynamicResource TextBlockStyle}" FontSize="12"/>
             </StackPanel>
             
